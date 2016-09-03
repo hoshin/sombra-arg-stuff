@@ -8,19 +8,23 @@ fi
 
 #VALUES='0.0038 0.0076 0.0075 0.0037 0.0039'
 
+sed 1d $1 > ./trimmedCSV
+
+#%age => 2, TS => 7
 echo "%age variations stats in file"
-uniqueValuesInFile=`cut -d, -f 2 "$1" | sort | uniq | tr '\n' ' '`
+uniqueValuesInFile=`cut -d, -f 2 ./trimmedCSV | sort | uniq | tr '\n' ' '`
 
 echo "Unique values found: $uniqueValuesInFile"
 
 for valueToLookup in $uniqueValuesInFile; do
-	echo "Occurences of '$valueToLookup' in file: `egrep -- "$valueToLookup" $1 | wc -l`"
+	echo "Occurences of '$valueToLookup' in file: `egrep -- "$valueToLookup" ./trimmedCSV | wc -l`"
 done
 
-echo "Binary string output (using 0.00038/7% as 1s and 0.00076/5% as 0s)"
-output=`cut -d, -f 3 "$1" | sed 's/\n//g'`
-printf -v order '%s' $output
-echo $order
+
+#echo "Binary string output (using 0.00038/7% as 1s and 0.00076/5% as 0s)"
+#output=`cut -d, -f 3 "$1" | sed 's/\n//g'`
+#printf -v order '%s' $output
+#echo $order
 
 #echo "Reverse binary string output"
 #reverseOutput=`cut -d, -f 4 "$1" | sed 's/\n//g'`
