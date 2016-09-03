@@ -17,16 +17,49 @@ uniqueValuesInFile=`cut -d, -f 2 ./trimmedCSV | sort | uniq | tr '\n' ' '`
 echo "Unique values found: $uniqueValuesInFile"
 
 for valueToLookup in $uniqueValuesInFile; do
-	echo "Occurences of '$valueToLookup' in file: `egrep -- "$valueToLookup" ./trimmedCSV | wc -l`"
+	
+	currentLookup=`egrep -- "$valueToLookup" ./trimmedCSV | wc -l`;
+	echo "Occurences of '$valueToLookup' in file: $currentLookup";
 done
 
 
-#echo "Binary string output (using 0.00038/7% as 1s and 0.00076/5% as 0s)"
-#output=`cut -d, -f 3 "$1" | sed 's/\n//g'`
-#printf -v order '%s' $output
-#echo $order
+binary=''
+sortedBinary=''
+reverseBinary=''
+sortedReverse=''
+while IFS='' read -r line || [[ -n "$line" ]]; do
+	currentLinePctage=`echo $line | cut -d, -f 2`
 
-#echo "Reverse binary string output"
-#reverseOutput=`cut -d, -f 4 "$1" | sed 's/\n//g'`
-#printf -v reverse '%s' $reverseOutput
-#echo $reverse
+	if [ "$currentLinePctage" == "+0.0038%" ]; then
+		binary="${binary}0"
+		sortedBinary="0${sortedBinary}"
+		reverseBinary="${reverseBinary}1"
+		sortedReverse="1${sortedReverse}"
+	elif [ "$currentLinePctage" == "+0.0076%" ]; then	
+		binary="${binary}1"
+		sortedBinary="1${sortedBinary}"
+		reverseBinary="${reverseBinary}0"
+		sortedReverse="0${sortedReverse}"
+	else 
+		binary="${binary}-"
+		sortedBinary="-${sortedBinary}"
+		reverseBinary="${reverseBinary}-"
+		sortedReverse="-${sortedReverse}"
+	fi
+done < "./trimmedCSV"
+
+echo "Binary-fied output"
+echo "$binary"
+
+echo ""
+echo "Binary-fied, sorted"
+echo "$sortedBinary"
+
+echo ""
+
+echo "Reverse binary"
+echo "$reverseBinary"
+
+echo ""
+echo "Reverse binary, sorted"
+echo "$sortedReverse"
