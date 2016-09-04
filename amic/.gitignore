@@ -1,2 +1,4 @@
 *.csv
 trimmedCSV
+.~lock*
+binaryfiedResults
