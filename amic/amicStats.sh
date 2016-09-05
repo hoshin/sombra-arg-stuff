@@ -18,7 +18,7 @@ echo "Unique values found: $uniqueValuesInFile"
 
 for valueToLookup in $uniqueValuesInFile; do
 	
-	currentLookup=`egrep -- "$valueToLookup" ./trimmedCSV | wc -l`;
+	currentLookup=`egrep -- "\+$valueToLookup" ./trimmedCSV | wc -l`;
 	echo "Occurences of '$valueToLookup' in file: $currentLookup";
 done
 
