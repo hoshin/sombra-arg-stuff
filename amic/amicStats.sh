@@ -22,7 +22,6 @@ for valueToLookup in $uniqueValuesInFile; do
 	echo "Occurences of '$valueToLookup' in file: $currentLookup";
 done
 
-
 function straight {
 	binary=''
 	sortedBinary=''
@@ -175,8 +174,15 @@ function smoother {
 	echo "$sortedReverse" > binaryfiedResults/reverseSorted_smoother&
 }
 
-straight
-smooth
-smoother
+read -p "Run the binary conversion?[y/n] " answer
 
-mkdir -p binaryfiedResults
+case $answer in
+   [yY]* )  mkdir -p binaryfiedResults
+	   		straight
+	   		smooth
+			smoother
+	   		break;;
+	* )     echo "Ok. Exiting then"; exit ;;
+esac
+
+
