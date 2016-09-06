@@ -9,6 +9,6 @@ function updateBinStrings {
 
 function echoAndOutput {
     echo -e $1
-	echo -e "$2" | tee 1 "binaryfiedResults/$3"
+	echo -e "$2" | tee 1 "binaryfiedResults/$3-$4"
     echo -e ""
 }

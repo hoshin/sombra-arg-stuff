@@ -24,13 +24,13 @@ function generateStrictBinary {
 		fi
 	done < "./trimmedCSV"
 
-    echoAndOutput "Writing binary-fied output" $binary 'binary'
-	echoAndOutput "Writing binary-fied, sorted" $sortedBinary 'sortedBinary'
-	echoAndOutput "Writing reverse binary" $reverseBinary 'reverseBinary'
-	echoAndOutput "Writing reverse binary, sorted" $sortedReverse 'reverseSorted'
+    echoAndOutput "Writing binary-fied output" $binary 'binary' $3
+	echoAndOutput "Writing binary-fied, sorted" $sortedBinary 'sortedBinary' $3
+	echoAndOutput "Writing reverse binary" $reverseBinary 'reverseBinary' $3
+	echoAndOutput "Writing reverse binary, sorted" $sortedReverse 'reverseSorted' $3
 }
 
-function showOutliers {
+function binaryShowOutliers {
     binary=''
 	sortedBinary=''
 	reverseBinary=''
@@ -51,39 +51,31 @@ function showOutliers {
 		fi
 	done < "./trimmedCSV"
 
-    echoAndOutput "Writing binary-fied output" $binary 'binaryWithOutliers'
-	echoAndOutput "Writing binary-fied, sorted" $sortedBinary 'sortedBinaryWithOutliers'
-	echoAndOutput "Writing reverse binary" $reverseBinary 'reverseBinaryWithOutliers'
-	echoAndOutput "Writing reverse binary, sorted" $sortedReverse 'reverseSortedWithOutliers'
-}
-
-function straight {
-    generateStrictBinary "+0.0038%" "+0.0076%"
-}
-
-function smooth {
-	generateStrictBinary "+0.0038% +0.0037%" "+0.0076% +0.0075%"
-}
-
-function smoother {
-	generateStrictBinary "+0.0038% +0.0037% +0.0039%" "+0.0076% +0.0075% +0.0077%"
+    echoAndOutput "Writing binary-fied output" $binary 'binaryWithOutliers' $3
+	echoAndOutput "Writing binary-fied, sorted" $sortedBinary 'sortedBinaryWithOutliers' $3
+	echoAndOutput "Writing reverse binary" $reverseBinary 'reverseBinaryWithOutliers' $3
+	echoAndOutput "Writing reverse binary, sorted" $sortedReverse 'reverseSortedWithOutliers' $3
 }
 
 function runBin {
     read -p "Run the binary conversion?[son] (strict bin, bin w/ printed outliers, do nothing) " answer
 
     case $answer in
-       [s]* )  mkdir -p binaryfiedResults
+       [s]* )   mkdir -p binaryfiedResults
                 echo "Straight up conversion, no smoothing"
-                straight
+                generateStrictBinary "+0.0038%" "+0.0076%" 'straight'
                 echo "Smoothing (closest outliers included)"
-                smooth
+                generateStrictBinary "+0.0038% +0.0037%" "+0.0076% +0.0075%" 'smooth'
                 echo "Even smoother (second closest outliers included)"
-                smoother
+                generateStrictBinary "+0.0038% +0.0037% +0.0039%" "+0.0076% +0.0075% +0.0077%" 'smoother'
                 break;;
        [o]* )   mkdir -p binaryfiedResults
-                echo "Straight up conversion, no smoothing"
-                showOutliers "+0.0038%" "+0.0076%"
+                echo "Straight up conversion, no smoothing, outliers visible"
+                binaryShowOutliers "+0.0038%" "+0.0076%" 'straightOutliers'
+                echo "Smoothing (closest outliers included), outliers visible"
+                echo "Even smoother (second closest outliers included), outliers visible"
+                binaryShowOutliers "+0.0038% +0.0037%" "+0.0076% +0.0075%" 'smoothOutliers'
+                binaryShowOutliers "+0.0038% +0.0037% +0.0039%" "+0.0076% +0.0075% +0.0077%" 'smootherOutliers'
                 break;;
         * )     echo "Ok. Exiting then"; exit ;;
     esac
