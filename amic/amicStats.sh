@@ -1,5 +1,9 @@
 #!/bin/bash -e
 
+source ./amicBinary.sh
+source ./amicUtils.sh
+
+
 if [ "$1" == "" ]; then 
 	echo "you need to specify a CSV file to parse"
 	echo "./amicStats.sh <path/to/your/csv>"
@@ -19,4 +23,4 @@ for valueToLookup in $uniqueValuesInFile; do
 	echo "Occurences of '$valueToLookup' in file: $currentLookup";
 done
 
-./amicBinary.sh
+runBin
